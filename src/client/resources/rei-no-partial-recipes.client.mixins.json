@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "de.pr77pr77.rei.nopartialrecipes.mixin.client",
+	"compatibilityLevel": "JAVA_21",
+	"client": [
+		"ExampleClientMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

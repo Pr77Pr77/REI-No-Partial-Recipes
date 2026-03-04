@@ -1,0 +1,39 @@
+{
+	"schemaVersion": 1,
+	"id": "rei-no-partial-recipes",
+	"version": "${version}",
+	"name": "REI No Partial Recipes",
+	"description": "Allows REI to display all vanilla recipes on servers that do not use REI.",
+	"authors": [
+		"Pr77Pr77"
+	],
+	"contact": {
+		"sources": "https://github.com/Pr77Pr77/REI-No-Partial-Recipes",
+		"issues": "https://github.com/Pr77Pr77/REI-No-Partial-Recipes/issues"
+	},
+	"license": "GPL-3.0",
+	"icon": "assets/rei-no-partial-recipes/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"main": [
+			"de.pr77pr77.rei.nopartialrecipes.REINoPartialRecipes"
+		],
+		"client": [
+			"de.pr77pr77.rei.nopartialrecipes.REINoPartialRecipesClient"
+		]
+	},
+	"mixins": [
+		"rei-no-partial-recipes.mixins.json",
+		{
+			"config": "rei-no-partial-recipes.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.18.4",
+		"minecraft": "1.21.11",
+		"java": ">=21",
+		"fabric-api": "*",
+		"roughlyenoughitems": ">=${rei_version}"
+	}
+}
