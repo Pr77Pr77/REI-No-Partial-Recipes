@@ -1,0 +1,7 @@
+{
+  "text.rei.recipes.not.full.title": "Teilweise Rezeptdaten Warnung",
+  "text.rei.recipes.not.full.desc": "REI hat keinen Zugriff auf alle Rezeptdaten!\nDas kann man dagegen machen:\n• Wenn du auf einem Vanilla-Server bist und Operator-Rechte hast, führe %s aus, um manche Rezepte freizuschalten.\n• Wenn du auf einem modifizierten Server bist, frage den Besitzer, ob er REI auf dem Server installieren kann.",
+  "text.rei.recipes.not.full.button.okay": "Okay, ich verstehe!",
+  "text.rei-no-partial-recepies.recipes.not.full.option": "\n• Wenn keine der Optionen möglich ist, kannst du Vanilla-Rezepte für diesen Server aktivieren. Diese können wieder in den Servereinstellungen deaktiviert werden.",
+  "text.rei-no-partial-recepies.recipes.not.full.option.button.enable": "Vanilla-Rezepte aktivieren"
+}

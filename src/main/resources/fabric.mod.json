@@ -20,6 +20,9 @@
 		],
 		"client": [
 			"de.pr77pr77.rei.nopartialrecipes.REINoPartialRecipesClient"
+		],
+		"rei_client": [
+			"de.pr77pr77.rei.nopartialrecipes.REIPlugin"
 		]
 	},
 	"mixins": [
