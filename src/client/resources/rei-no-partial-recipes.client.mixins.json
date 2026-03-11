@@ -1,11 +1,12 @@
 {
-	"required": true,
-	"package": "de.pr77pr77.rei.nopartialrecipes.mixin.client",
-	"compatibilityLevel": "JAVA_21",
-	"client": [
-      "ImportantWarningsWidgetAddOption"
-	],
-	"injectors": {
-		"defaultRequire": 1
-	}
+  "required": true,
+  "package": "de.pr77pr77.rei.nopartialrecipes.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ImportantWarningsWidgetAddOption",
+    "TransmuteRecipeAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

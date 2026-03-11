@@ -20,5 +20,7 @@ public class REINoPartialRecipes implements ModInitializer {
 		// Proceed with mild caution.
 
 		LOGGER.info("Hello Fabric world!");
+
+		RecipeJsonDumper.init();
 	}
 }

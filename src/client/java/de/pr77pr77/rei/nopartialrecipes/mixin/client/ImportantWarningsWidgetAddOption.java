@@ -1,5 +1,6 @@
 package de.pr77pr77.rei.nopartialrecipes.mixin.client;
 
+import de.pr77pr77.rei.nopartialrecipes.REINoPartialRecipesClient;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import net.minecraft.client.MinecraftClient;
@@ -88,7 +89,7 @@ public abstract class ImportantWarningsWidgetAddOption {
             this.visible = false;
             Widgets.produceClickSound();
             LOGGER.info("Clicked on enable vanilla recipes!");
-            // TODO: Enable vanilla recipes
+            REINoPartialRecipesClient.serverManager.addCurrentServer();
             cir.setReturnValue(true);
         }
     }
