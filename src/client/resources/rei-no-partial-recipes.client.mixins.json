@@ -4,6 +4,9 @@
   "compatibilityLevel": "JAVA_21",
   "client": [
     "ImportantWarningsWidgetAddOption",
+    "MultiplayerDeleteNotifier",
+    "REIConfigScreenAccessor",
+    "REIConfigScreenAdder",
     "TransmuteRecipeAccessor"
   ],
   "injectors": {

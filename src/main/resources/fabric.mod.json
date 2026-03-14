@@ -23,6 +23,9 @@
 		],
 		"rei_client": [
 			"de.pr77pr77.rei.nopartialrecipes.REIPlugin"
+		],
+		"modmenu": [
+			"de.pr77pr77.rei.nopartialrecipes.ModMenuIntegration"
 		]
 	},
 	"mixins": [
@@ -38,5 +41,13 @@
 		"java": ">=21",
 		"fabric-api": "*",
 		"roughlyenoughitems": ">=${rei_version}"
+	},
+	"suggests": {
+		"modmenu": "*"
+	},
+	"custom": {
+		"modmenu": {
+			"parent": "roughlyenoughitems"
+		}
 	}
 }

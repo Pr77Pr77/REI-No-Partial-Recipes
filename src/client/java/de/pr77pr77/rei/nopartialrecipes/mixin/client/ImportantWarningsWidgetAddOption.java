@@ -1,8 +1,10 @@
 package de.pr77pr77.rei.nopartialrecipes.mixin.client;
 
 import de.pr77pr77.rei.nopartialrecipes.REINoPartialRecipesClient;
+import de.pr77pr77.rei.nopartialrecipes.REIPlugin;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
+import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
@@ -50,6 +52,16 @@ public abstract class ImportantWarningsWidgetAddOption {
         }
     }
 
+    @Inject(
+            method = "<init>",
+            at = @At("TAIL")
+    )
+    private void makeInvisible(CallbackInfo ci) {
+        if(REINoPartialRecipesClient.serverManager.getCurrentServerRecipeDataIDs().contains("minecraft") || MinecraftClient.getInstance().getCurrentServerEntry() == null){
+            this.visible = false;
+        }
+    }
+
     @Redirect(
             method = "<init>",
             at = @At(
@@ -90,6 +102,7 @@ public abstract class ImportantWarningsWidgetAddOption {
             Widgets.produceClickSound();
             LOGGER.info("Clicked on enable vanilla recipes!");
             REINoPartialRecipesClient.serverManager.addCurrentServer();
+            new REIPlugin().registerDisplays(DisplayRegistry.getInstance());
             cir.setReturnValue(true);
         }
     }
