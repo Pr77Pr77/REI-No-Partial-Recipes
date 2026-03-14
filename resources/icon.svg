@@ -8,7 +8,7 @@
    version="1.1"
    id="svg5"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   sodipodi:docname="REI-NPR.svg"
+   sodipodi:docname="icon.svg"
    xml:space="preserve"
    inkscape:export-filename="rei-no-partial-recipes/src/main/resources/assets/rei-no-partial-recipes/icon.png"
    inkscape:export-xdpi="24"
@@ -29,14 +29,14 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="0.97995235"
-     inkscape:cx="141.84363"
+     inkscape:cx="139.80272"
      inkscape:cy="280.62589"
      inkscape:window-width="1920"
      inkscape:window-height="1012"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" /><defs
+     inkscape:current-layer="svg5" /><defs
      id="defs2"><inkscape:path-effect
        effect="fillet_chamfer"
        id="path-effect1071"
@@ -83,11 +83,7 @@
        width="135.46667"
        height="135.46667"
        preserveAspectRatio="none"
-       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAHlBMVEW8mGKuaTyeWTJzOSBVOCRL
-KxhBIw4aFQ0ZFAwOCwZHZAmgAAAAaElEQVR42nWPUQoDUQgDE9dEvf+FCy5vaSk7+OOAxKBn2tfi
-mmoM4OASBgYD88EYtJnKTElKuuFgBpMUmQzj4m5HXytS9zzizKuQlPo+UVAMkSvuWK3e2PKm3ND1
-/3r9lit0TZ36PdMft8EDNpiNkFcAAAAASUVORK5CYII=
-"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAHlBMVEW8mGKuaTyeWTJzOSBVOCRL KxhBIw4aFQ0ZFAwOCwZHZAmgAAAAaElEQVR42nWPUQoDUQgDE9dEvf+FCy5vaSk7+OOAxKBn2tfi mmoM4OASBgYD88EYtJnKTElKuuFgBpMUmQzj4m5HXytS9zzizKuQlPo+UVAMkSvuWK3e2PKm3ND1 /3r9lit0TZ36PdMft8EDNpiNkFcAAAAASUVORK5CYII= "
        id="image9432"
        x="0"
        y="0"
@@ -95,20 +91,7 @@ mmoM4OASBgYD88EYtJnKTElKuuFgBpMUmQzj4m5HXytS9zzizKuQlPo+UVAMkSvuWK3e2PKm3ND1
        width="135.46666"
        height="135.46666"
        preserveAspectRatio="none"
-       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABhGlDQ1BJQ0MgcHJvZmlsZQAAKJF9
-kb9Lw0AcxV9TpSJRBzuIOGSoLtpFRRxrFYpQodQKrTqYXPoLmjQkKS6OgmvBwR+LVQcXZ10dXAVB
-8AeIf4A4KbpIid9LCi1iPDjuw7t7j7t3gNCoMM3qigGabpvpRFzK5lal0CuC6IeIcYgys4y5VCoJ
-3/F1jwBf76I8y//cn6NPzVsMCEjEMWaYNvEG8cymbXDeJw6zkqwSnxNPmHRB4keuKx6/cS66LPDM
-sJlJzxOHiaViBysdzEqmRjxNHFE1nfKFrMcq5y3OWqXGWvfkLxTz+soy12mOIIFFLCEFCQpqKKMC
-G1FadVIspGk/7uMfdv0pcinkKoORYwFVaJBdP/gf/O7WKkxNekliHOh+cZyPUSC0CzTrjvN97DjN
-EyD4DFzpbX+1Acx+kl5va5EjYGAbuLhua8oecLkDDD0Zsim7UpCmUCgA72f0TTlg8BboXfN6a+3j
-9AHIUFfJG+DgEBgrUva6z7t7Onv790yrvx90r3KnVpI+FwAAAAZiS0dEAAAAAAAA+UO7fwAAAAlw
-SFlzAAAuIwAALiMBeKU/dgAAAAd0SU1FB+oDDg0FBdmxDD4AAAAZdEVYdENvbW1lbnQAQ3JlYXRl
-ZCB3aXRoIEdJTVBXgQ4XAAAAkUlEQVQ4y72TSwoEIQxEX5o5UMAj1bk8UsAbOYtBcKT9TC/GjYFg
-1Uti4B+nlFJnuev0cUqpPhIAkMQjgh49IuwRwcp9KXDiviXYuQO8du45Z4DbCbi7XbM59+4tHu+U
-UrVewN2txZKICFt9IkmfHrj7l9BY+4wAwMbaW7J1/oigb8rd2I4Jfl0kSXuB1SIBvAHpAViz+uf5
-8gAAAABJRU5ErkJggg==
-"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABhGlDQ1BJQ0MgcHJvZmlsZQAAKJF9 kb9Lw0AcxV9TpSJRBzuIOGSoLtpFRRxrFYpQodQKrTqYXPoLmjQkKS6OgmvBwR+LVQcXZ10dXAVB 8AeIf4A4KbpIid9LCi1iPDjuw7t7j7t3gNCoMM3qigGabpvpRFzK5lal0CuC6IeIcYgys4y5VCoJ 3/F1jwBf76I8y//cn6NPzVsMCEjEMWaYNvEG8cymbXDeJw6zkqwSnxNPmHRB4keuKx6/cS66LPDM sJlJzxOHiaViBysdzEqmRjxNHFE1nfKFrMcq5y3OWqXGWvfkLxTz+soy12mOIIFFLCEFCQpqKKMC G1FadVIspGk/7uMfdv0pcinkKoORYwFVaJBdP/gf/O7WKkxNekliHOh+cZyPUSC0CzTrjvN97DjN EyD4DFzpbX+1Acx+kl5va5EjYGAbuLhua8oecLkDDD0Zsim7UpCmUCgA72f0TTlg8BboXfN6a+3j 9AHIUFfJG+DgEBgrUva6z7t7Onv790yrvx90r3KnVpI+FwAAAAZiS0dEAAAAAAAA+UO7fwAAAAlw SFlzAAAuIwAALiMBeKU/dgAAAAd0SU1FB+oDDg0FBdmxDD4AAAAZdEVYdENvbW1lbnQAQ3JlYXRl ZCB3aXRoIEdJTVBXgQ4XAAAAkUlEQVQ4y72TSwoEIQxEX5o5UMAj1bk8UsAbOYtBcKT9TC/GjYFg 1Uti4B+nlFJnuev0cUqpPhIAkMQjgh49IuwRwcp9KXDiviXYuQO8du45Z4DbCbi7XbM59+4tHu+U UrVewN2txZKICFt9IkmfHrj7l9BY+4wAwMbaW7J1/oigb8rd2I4Jfl0kSXuB1SIBvAHpAViz+uf5 8gAAAABJRU5ErkJggg== "
        id="image1350"
        x="0"
        y="4.1697621e-16"
@@ -186,8 +169,4 @@ UrVewN2txZKICFt9IkmfHrj7l9BY+4wAwMbaW7J1/oigb8rd2I4Jfl0kSXuB1SIBvAHpAViz+uf5
        d="M 94.084696 3.96875 L 131.49792 41.38197 L 131.49792 3.96875 L 94.084696 3.96875 z " /><path
        id="rect9917-0"
        style="display:inline;fill:#bc9862;stroke:#41230e;stroke-width:7.9375;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers;fill-opacity:1"
-       d="M 3.96875 3.96875 L 3.96875 41.38197 L 41.38197 3.96875 L 3.96875 3.96875 z " /></g><g
-     inkscape:groupmode="layer"
-     id="layer3"
-     inkscape:label="Crafting grid"
-     style="stroke-width:7.9375;stroke-dasharray:none;stroke:#4b2b18;stroke-opacity:1" /></svg>
+       d="M 3.96875 3.96875 L 3.96875 41.38197 L 41.38197 3.96875 L 3.96875 3.96875 z " /></g></svg>
