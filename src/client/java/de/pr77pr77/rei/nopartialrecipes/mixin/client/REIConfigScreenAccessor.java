@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
 
-@Mixin(REIConfigScreen.class)
+@Mixin(value = REIConfigScreen.class, remap = false)
 public interface REIConfigScreenAccessor {
 
     @Accessor("activeCategory")

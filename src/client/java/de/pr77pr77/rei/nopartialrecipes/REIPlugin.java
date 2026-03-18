@@ -37,7 +37,6 @@ import net.minecraft.registry.*;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.RawFilteredPair;
 import net.minecraft.util.Identifier;
-import org.jspecify.annotations.NonNull;
 
 import java.util.*;
 
@@ -360,7 +359,7 @@ public class REIPlugin implements REIClientPlugin {
         }
     }
 
-    private static @NonNull RegistryOps<JsonElement> getJsonElementRegistryOps(Identifier id) {
+    private static RegistryOps<JsonElement> getJsonElementRegistryOps(Identifier id) {
         MinecraftClient client = MinecraftClient.getInstance();
         ClientPlayNetworkHandler handler = client.getNetworkHandler();
 

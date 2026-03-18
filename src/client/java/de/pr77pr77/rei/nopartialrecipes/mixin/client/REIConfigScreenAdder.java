@@ -21,13 +21,13 @@ import java.util.Objects;
 
 import static me.shedaniel.rei.impl.client.gui.config.options.ConfigUtils.translatable;
 
-@Mixin(REIConfigScreen.class)
+@Mixin(value = REIConfigScreen.class, remap = false)
 public class REIConfigScreenAdder {
     @ModifyVariable(
-            method = "<init>(Lnet/minecraft/client/gui/screen/Screen;Ljava/util/List;)V",
+            method = "<init>*",
             at = @At("HEAD"),
             argsOnly = true,
-            index = 2
+            ordinal = 0
     )
     private static List<OptionCategory> nopartialrecipes$modifyCategories(List<OptionCategory> original) {
         List<OptionCategory> modified = new ArrayList<>(original);

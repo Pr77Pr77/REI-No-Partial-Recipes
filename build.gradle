@@ -1,5 +1,5 @@
 plugins {
-	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+	id 'fabric-loom' version "${loom_version}"
 	id 'maven-publish'
 }
 
@@ -45,7 +45,7 @@ dependencies {
 	modImplementation "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
 
 	// Mod Menu, but only for compiling.
-	modCompileOnly "com.terraformersmc:modmenu:17.0.0-beta.2"
+	modCompileOnly "com.terraformersmc:modmenu:16.0.0"
 }
 
 processResources {

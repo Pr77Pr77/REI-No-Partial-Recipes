@@ -27,14 +27,14 @@ import static de.pr77pr77.rei.nopartialrecipes.REINoPartialRecipes.LOGGER;
 
 @Mixin(me.shedaniel.rei.impl.client.gui.hints.ImportantWarningsWidget.class)
 public abstract class ImportantWarningsWidgetAddOption {
-    @Shadow
+    @Shadow(remap = false)
     @Final
     private Rectangle bounds;
 
-    @Shadow
+    @Shadow(remap = false)
     private boolean visible;
 
-    @Shadow
+    @Shadow(remap = false)
     private static boolean dirty;
 
     @Redirect(
@@ -42,7 +42,8 @@ public abstract class ImportantWarningsWidgetAddOption {
             at = @At(
                     value = "INVOKE",
                     target = "Ljava/util/List;of(Ljava/lang/Object;Ljava/lang/Object;)Ljava/util/List;"
-            )
+            ),
+            remap = false
     )
     private List<?> addOption(Object title, Object text) {
         if (text instanceof Text realText) {
@@ -54,7 +55,8 @@ public abstract class ImportantWarningsWidgetAddOption {
 
     @Inject(
             method = "<init>",
-            at = @At("TAIL")
+            at = @At("TAIL"),
+            remap = false
     )
     private void makeInvisible(CallbackInfo ci) {
         if(REINoPartialRecipesClient.serverManager.getCurrentServerRecipeDataIDs().contains("minecraft") || MinecraftClient.getInstance().getCurrentServerEntry() == null){
@@ -67,7 +69,8 @@ public abstract class ImportantWarningsWidgetAddOption {
             at = @At(
                     value = "INVOKE",
                     target = "Ljava/lang/Math;min(II)I"
-            )
+            ),
+            remap = false
     )
     private int addButtonSpace(int a, int b) {
         return Math.min(a + 20, b);
