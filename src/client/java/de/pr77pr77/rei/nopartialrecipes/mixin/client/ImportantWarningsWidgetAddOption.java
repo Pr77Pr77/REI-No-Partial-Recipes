@@ -6,7 +6,6 @@ import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -98,8 +97,8 @@ public abstract class ImportantWarningsWidgetAddOption {
             method = "mouseClicked",
             at = @At("RETURN"),
             cancellable = true)
-    private void checkButtonClicked(Click event, boolean doubleClick, CallbackInfoReturnable<Boolean> cir) {
-        if (!cir.getReturnValue() && this.visible && event.button() == 0 && vanillaRecipesButtonBounds.contains(event.x(), event.y())) {
+    private void checkButtonClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
+        if (!cir.getReturnValue() && this.visible && button == 0 && vanillaRecipesButtonBounds.contains(mouseX, mouseY)) {
             dirty = false;
             this.visible = false;
             Widgets.produceClickSound();
