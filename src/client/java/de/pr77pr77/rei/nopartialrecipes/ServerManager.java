@@ -70,7 +70,7 @@ public class ServerManager {
         if (enable && getServerRecipeDataIDs(serverAddress).isEmpty()) {
             data.servers.add(new ServerSetting(serverAddress));
             saveAsync();
-            new REIPlugin().registerDisplays(DisplayRegistry.getInstance());
+            REIPlugin.instance.registerDisplays(DisplayRegistry.getInstance());
         } else if (!enable && getServerRecipeDataIDs(serverAddress).contains("minecraft")) {
             data.servers.removeIf(s -> s.serverAddress.equals(serverAddress));
             saveAsync();
