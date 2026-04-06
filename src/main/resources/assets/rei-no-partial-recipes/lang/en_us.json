@@ -1,6 +1,8 @@
 {
   "text.rei-no-partial-recepies.recipes.not.full.option": "\n• If neither option is possible, you can enable vanilla recipes for this server. This can be disabled again in the REI settings.",
   "text.rei-no-partial-recepies.recipes.not.full.option.button.enable": "Enable vanilla recipes",
+  "text.rei-no-partial-recepies.recipes.not.full.need.relog.title": "Vanilla Recipes Enabled Warning",
+  "text.rei-no-partial-recepies.recipes.not.full.need.relog.desc": "A relog is required to apply the change and disable vanilla recipes!",
   "config.rei-no-partial-recipes.categories.no-partial-recipes": "No Partial Recip.",
   "config.rei-no-partial-recipes.categories.no-partial-recipes.desc": "No Partial Recipes: Enabled servers",
   "config.rei-no-partial-recipes.options.groups.no-partial-recipes.servers": "Enabled servers",
