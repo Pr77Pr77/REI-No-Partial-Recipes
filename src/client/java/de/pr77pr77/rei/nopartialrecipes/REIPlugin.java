@@ -6,35 +6,23 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
-import de.pr77pr77.rei.nopartialrecipes.mixin.client.TransmuteRecipeAccessor;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
+import me.shedaniel.rei.api.client.registry.display.reason.DisplayAdditionReason;
 import me.shedaniel.rei.api.common.display.Display;
+import me.shedaniel.rei.api.common.registry.display.ServerDisplayRegistry;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
-import me.shedaniel.rei.plugin.client.categories.crafting.filler.ArmorDyeRecipeFiller;
-import me.shedaniel.rei.plugin.common.displays.DefaultCampfireDisplay;
-import me.shedaniel.rei.plugin.common.displays.DefaultSmithingDisplay;
-import me.shedaniel.rei.plugin.common.displays.DefaultStoneCuttingDisplay;
-import me.shedaniel.rei.plugin.common.displays.cooking.DefaultBlastingDisplay;
-import me.shedaniel.rei.plugin.common.displays.cooking.DefaultSmeltingDisplay;
-import me.shedaniel.rei.plugin.common.displays.cooking.DefaultSmokingDisplay;
 import me.shedaniel.rei.plugin.common.displays.crafting.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.MapIdComponent;
-import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.component.type.WrittenBookContentComponent;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.potion.Potion;
 import net.minecraft.recipe.*;
 import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.recipe.input.SmithingRecipeInput;
 import net.minecraft.registry.*;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.RawFilteredPair;
 import net.minecraft.util.Identifier;
 import org.jspecify.annotations.NonNull;
@@ -64,114 +52,17 @@ public class REIPlugin implements REIClientPlugin {
             "Herobrine", "God", "Santa Claus", "The Easter Bunny", "The Tooth Fairy"
     };
 
+    @SuppressWarnings("UnstableApiUsage")
     @Override
     public void registerDisplays(DisplayRegistry registry) {
         if (!serverManager.getCurrentServerRecipeDataIDs().contains("minecraft")) {
             return;
         }
+        ServerDisplayRegistry serverRegistry = ServerDisplayRegistry.getInstance();
         recipes.forEach((RecipeJsonDumper.RecipeData data) -> {
             Recipe<?> recipe = parseRecipeFromJson(data.id, data.json);
-            // Crafting:
-            if (recipe instanceof ShapedRecipe shapedCrafting) {
-                registry.add(new DefaultShapedDisplay(new RecipeEntry<>(RegistryKey.of(RegistryKeys.RECIPE, data.id), shapedCrafting)));
-            } else if (recipe instanceof ShapelessRecipe shapelessCrafting) {
-                registry.add(new DefaultShapelessDisplay(new RecipeEntry<>(RegistryKey.of(RegistryKeys.RECIPE, data.id), shapelessCrafting)));
-            } else if (recipe instanceof TransmuteRecipe transmuteRecipe) {
-                if (MinecraftClient.getInstance().world == null) {
-                    return;
-                }
-                Ingredient inputIng = ((TransmuteRecipeAccessor) transmuteRecipe).getInput();
-                Ingredient materialIng = ((TransmuteRecipeAccessor) transmuteRecipe).getMaterial();
 
-                ItemStack exampleInput = ItemStack.EMPTY;
-                ItemStack exampleMaterial = ItemStack.EMPTY;
-
-                for (Identifier id : Registries.ITEM.getIds()) {
-                    Item item = Registries.ITEM.get(id);
-                    ItemStack s = new ItemStack(item);
-                    if (exampleInput.isEmpty() && inputIng.test(s)) {
-                        exampleInput = s.copy();
-                    }
-                    if (exampleMaterial.isEmpty() && materialIng.test(s)) {
-                        exampleMaterial = s.copy();
-                    }
-                    if (!exampleInput.isEmpty() && !exampleMaterial.isEmpty()) break;
-                }
-
-                if (exampleInput.isEmpty() || exampleMaterial.isEmpty()) {
-                    LOGGER.warn("No valid item for TransmuteRecipe found: " + data.id);
-                    return;
-                }
-
-                List<ItemStack> stacks = new ArrayList<>();
-                stacks.add(exampleInput);
-                stacks.add(exampleMaterial);
-                CraftingRecipeInput craftInput = CraftingRecipeInput.create(2, 1, stacks);
-
-                RegistryWrapper.WrapperLookup lookup = MinecraftClient.getInstance().world.getRegistryManager();
-
-                ItemStack crafted = transmuteRecipe.craft(craftInput, lookup);
-
-                if (!crafted.isEmpty()) {
-                    EntryIngredient output = EntryIngredients.of(crafted);
-
-                    registry.add(new DefaultCustomShapelessDisplay(List.of(EntryIngredients.ofIngredient(inputIng), EntryIngredients.ofIngredient(materialIng)), List.of(output), Optional.empty()));
-                } else {
-                    LOGGER.warn("TransmuteRecipe.craft(...) did not produce a result!");
-                }
-
-            } else if (recipe instanceof TippedArrowRecipe tippedArrowRecipe) {
-                if (MinecraftClient.getInstance().world == null) {
-                    return;
-                }
-                ItemStack arrow = new ItemStack(Items.ARROW);
-                EntryIngredient arrowEntryIng = EntryIngredients.ofItems(List.of(Items.ARROW));
-
-                for (Potion potion : Registries.POTION) {
-                    ItemStack stack = new ItemStack(Items.LINGERING_POTION);
-                    RegistryEntry<Potion> entry = Registries.POTION.getEntry(potion);
-                    stack.set(
-                            DataComponentTypes.POTION_CONTENTS,
-                            new PotionContentsComponent(entry)
-                    );
-
-                    CraftingRecipeInput craftInput = CraftingRecipeInput.create(3, 3, List.of(
-                            arrow, arrow, arrow,
-                            arrow, stack, arrow,
-                            arrow, arrow, arrow
-                    ));
-                    RegistryWrapper.WrapperLookup lookup = MinecraftClient.getInstance().world.getRegistryManager();
-                    ItemStack crafted = tippedArrowRecipe.craft(craftInput, lookup);
-                    if (!crafted.isEmpty()) {
-                        registry.add(new DefaultCustomDisplay(List.of(
-                                arrowEntryIng, arrowEntryIng, arrowEntryIng,
-                                arrowEntryIng, EntryIngredients.ofItemStacks(List.of(stack)), arrowEntryIng,
-                                arrowEntryIng, arrowEntryIng, arrowEntryIng),
-                                List.of(EntryIngredients.ofItemStacks(List.of(crafted))), Optional.empty()));
-                    } else {
-                        LOGGER.warn("TippedArrowRecipe.craft(...) did not produce a result for potion: " + potion.getBaseName());
-                    }
-                }
-            } else if (recipe instanceof MapCloningRecipe mapCloningRecipe) {
-                if (MinecraftClient.getInstance().world == null) {
-                    return;
-                }
-                ItemStack map = new ItemStack(Items.FILLED_MAP);
-                map.set(DataComponentTypes.MAP_ID, new MapIdComponent(0));
-
-                CraftingRecipeInput craftInput = CraftingRecipeInput.create(2, 1, List.of(
-                        map, new ItemStack(Items.MAP)
-                ));
-                RegistryWrapper.WrapperLookup lookup = MinecraftClient.getInstance().world.getRegistryManager();
-                ItemStack crafted = mapCloningRecipe.craft(craftInput, lookup);
-                if (!crafted.isEmpty()) {
-                    registry.add(new DefaultCustomShapelessDisplay(List.of(
-                            EntryIngredients.ofItemStacks(List.of(map)), EntryIngredients.ofItems(List.of(Items.MAP))),
-                            List.of(EntryIngredients.ofItemStacks(List.of(crafted))), Optional.empty()));
-                } else {
-                    LOGGER.warn("MapCloningRecipe.craft(...) did not produce a result!");
-                }
-            } else if (recipe instanceof BookCloningRecipe bookCloningRecipe) {
+            if (recipe instanceof BookCloningRecipe bookCloningRecipe) { // Own book cloning display for modifying the Easter egg
                 if (MinecraftClient.getInstance().world == null) {
                     return;
                 }
@@ -221,105 +112,11 @@ public class REIPlugin implements REIClientPlugin {
                         LOGGER.warn("BookCloningRecipe.craft(...) did not produce a result for a book with book count: " + countEmptyBooks);
                     }
                 }
-            } else if (recipe instanceof ArmorDyeRecipe armorDyeRecipe) {
-                ArmorDyeRecipeFiller armorDyeRecipeFiller = new ArmorDyeRecipeFiller();
-                Collection<Display> displays = armorDyeRecipeFiller.apply(new RecipeEntry<>(RegistryKey.of(RegistryKeys.RECIPE, data.id), armorDyeRecipe));
-                for (Display display : displays) {
-                    registry.add(display);
+            } else { // Using the ServerDisplayRegistry to fill the displays from RecipeEntry.
+                RecipeEntry<Recipe<?>> recipeEntry = new RecipeEntry<>(RegistryKey.of(RegistryKeys.RECIPE, data.id), recipe);
+                for (Display display : serverRegistry.tryFillDisplay(recipeEntry, DisplayAdditionReason.RECIPE_MANAGER)) {
+                    registry.add(display, recipeEntry);
                 }
-            }
-            // Cooking:
-            else if (recipe instanceof SmeltingRecipe smeltingRecipe) {
-                registry.add(new DefaultSmeltingDisplay(new RecipeEntry<>(RegistryKey.of(RegistryKeys.RECIPE, data.id), (smeltingRecipe))));
-            } else if (recipe instanceof SmokingRecipe smokingRecipe) {
-                registry.add(new DefaultSmokingDisplay(new RecipeEntry<>(RegistryKey.of(RegistryKeys.RECIPE, data.id), smokingRecipe)));
-            } else if (recipe instanceof CampfireCookingRecipe campfireCookingRecipe) {
-                registry.add(new DefaultCampfireDisplay(new RecipeEntry<>(RegistryKey.of(RegistryKeys.RECIPE, data.id), (campfireCookingRecipe))));
-            } else if (recipe instanceof BlastingRecipe blastingRecipe) {
-                registry.add(new DefaultBlastingDisplay(new RecipeEntry<>(RegistryKey.of(RegistryKeys.RECIPE, data.id), (blastingRecipe))));
-            }
-            // Smithing:
-            else if (recipe instanceof SmithingRecipe smithingRecipe) {
-                if (MinecraftClient.getInstance() == null || MinecraftClient.getInstance().world == null) {
-                    return;
-                }
-
-                // Getting inputs
-                List<EntryIngredient> inputs = new ArrayList<>();
-                if (smithingRecipe.template().isPresent()) {
-                    inputs.add(EntryIngredients.ofIngredient(smithingRecipe.template().get()));
-                }
-
-                inputs.add(null);
-
-                if (smithingRecipe.addition().isPresent()) {
-                    inputs.add(EntryIngredients.ofIngredient(smithingRecipe.addition().get()));
-                }
-
-                // Getting output
-                ItemStack templateStack;
-                if (smithingRecipe.template().isPresent()) {
-                    templateStack = Registries.ITEM.stream()
-                            .map(ItemStack::new)
-                            .filter(stack -> smithingRecipe.template().get().test(stack))
-                            .findFirst()
-                            .orElse(ItemStack.EMPTY);
-                } else {
-                    templateStack = ItemStack.EMPTY;
-                }
-
-                Registries.ITEM.stream()
-                        .map(ItemStack::new)
-                        .filter(stack -> smithingRecipe.base().test(stack))
-                        .forEach(baseStack -> {
-                            List<EntryIngredient> inputsSpecific = new ArrayList<>(inputs);
-                            inputsSpecific.set(1, EntryIngredients.of(baseStack));
-
-                            List<ItemStack> results = new ArrayList<>();
-
-                            if (smithingRecipe.addition().isPresent()) {
-                                Registries.ITEM.stream()
-                                        .map(ItemStack::new)
-                                        .filter(stack -> smithingRecipe.addition().get().test(stack))
-                                        .forEach(additionStack -> {
-
-                                            SmithingRecipeInput input = new SmithingRecipeInput(
-                                                    templateStack,
-                                                    baseStack,
-                                                    additionStack
-                                            );
-
-                                            ItemStack result = smithingRecipe.craft(
-                                                    input,
-                                                    MinecraftClient.getInstance().world.getRegistryManager()
-                                            );
-
-                                            if (!result.isEmpty()) {
-                                                results.add(result);
-                                            }
-                                        });
-                            }
-
-                            EntryIngredient output = EntryIngredients.ofItemStacks(results);
-
-                            registry.add(new DefaultSmithingDisplay(
-                                    inputsSpecific,
-                                    List.of(output),
-                                    Optional.of(data.id)
-                            ));
-                        });
-            }
-            // Stonecutting:
-            else if (recipe instanceof StonecuttingRecipe stonecuttingRecipe) {
-                registry.add(new DefaultStoneCuttingDisplay(new RecipeEntry<>(RegistryKey.of(RegistryKeys.RECIPE, data.id), stonecuttingRecipe)));
-            } else if (!Objects.equals(data.id, Identifier.of("minecraft", "banner_duplicate")) && // REI doesn't display this in singleplayer.
-                    !Objects.equals(data.id, Identifier.of("minecraft", "firework_star_fade")) && // REI doesn't display this in singleplayer.
-                    !Objects.equals(data.id, Identifier.of("minecraft", "firework_star")) && // REI doesn't display this in singleplayer.
-                    !Objects.equals(data.id, Identifier.of("minecraft", "firework_rocket")) && // REI doesn't display this in singleplayer.
-                    !Objects.equals(data.id, Identifier.of("minecraft", "repair_item")) && // Already displayed by REI
-                    !Objects.equals(data.id, Identifier.of("minecraft", "shield_decoration")) && // REI doesn't display this in singleplayer.
-                    !Objects.equals(data.id, Identifier.of("minecraft", "decorated_pot"))) { // REI doesn't display this in singleplayer.
-                LOGGER.warn("Dropped " + recipe.getType() + " recipe: " + data.id);
             }
         });
     }
