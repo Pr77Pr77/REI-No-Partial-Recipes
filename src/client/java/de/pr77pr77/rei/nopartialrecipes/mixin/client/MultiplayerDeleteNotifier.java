@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(MultiplayerScreen.class)
 public class MultiplayerDeleteNotifier {
     @Inject(method = "removeEntry", at = @At("TAIL"))
-    private void onServerDeleted(boolean confirmedAction, CallbackInfo ci) {
+    private void nopartialrecipes$cleanupJSONonServerDeletion(boolean confirmedAction, CallbackInfo ci) {
         REINoPartialRecipesClient.serverManager.cleanup();
     }
 }

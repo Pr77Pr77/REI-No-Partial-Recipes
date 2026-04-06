@@ -36,7 +36,7 @@ public abstract class DisplayRegistryImplMixin {
             method = "addRecipes",
             at = @At("TAIL")
     )
-    private void onAddRecipes(List<RecipeDisplayEntry> entries, CallbackInfo ci) {
+    private void nopartialrecipes$setServerRecipesRegistered(List<RecipeDisplayEntry> entries, CallbackInfo ci) {
         REIPlugin.instance.serverRecipesRegistered = true;
     }
 }

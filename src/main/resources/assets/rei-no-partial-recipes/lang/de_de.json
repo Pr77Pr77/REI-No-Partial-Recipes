@@ -4,6 +4,8 @@
   "text.rei.recipes.not.full.button.okay": "Okay, ich verstehe!",
   "text.rei-no-partial-recepies.recipes.not.full.option": "\n• Wenn keine der Optionen möglich ist, kannst du Vanilla-Rezepte für diesen Server aktivieren. Diese können wieder in den REI-Einstellungen deaktiviert werden.",
   "text.rei-no-partial-recepies.recipes.not.full.option.button.enable": "Vanilla-Rezepte aktivieren",
+  "text.rei-no-partial-recepies.recipes.not.full.need.relog.title": "Vanilla Rezepte Aktiviert Warnung",
+  "text.rei-no-partial-recepies.recipes.not.full.need.relog.desc": "Ein erneutes Verbinden ist erforderlich um die Änderungen anzuwenden und Vanilla-Rezepte zu deaktivieren!",
   "config.rei-no-partial-recipes.categories.no-partial-recipes": "No Partial Recip.",
   "config.rei-no-partial-recipes.categories.no-partial-recipes.desc": "No Partial Recipes: Aktivierte Server",
   "config.rei-no-partial-recipes.options.groups.no-partial-recipes.servers": "Aktivierte Server",

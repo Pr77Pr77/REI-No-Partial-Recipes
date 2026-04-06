@@ -45,9 +45,13 @@ public abstract class ImportantWarningsWidgetAddOption {
             ),
             remap = false
     )
-    private List<?> addOption(Object title, Object text) {
+    private List<?> nopartialrecipes$addOption(Object title, Object text) {
         if (text instanceof Text realText) {
-            return List.of(title, realText.copy().append(Text.translatable("text.rei-no-partial-recepies.recipes.not.full.option").formatted(Formatting.GRAY)));
+            if (REINoPartialRecipesClient.serverManager.relogRequired) {
+                return List.of(Text.translatable("text.rei-no-partial-recepies.recipes.not.full.need.relog.title").formatted(Formatting.RED), Text.translatable("text.rei-no-partial-recepies.recipes.not.full.need.relog.desc"));
+            } else {
+                return List.of(title, realText.copy().append(Text.translatable("text.rei-no-partial-recepies.recipes.not.full.option").formatted(Formatting.GRAY)));
+            }
         } else {
             return List.of(title, text);
         }
@@ -58,9 +62,11 @@ public abstract class ImportantWarningsWidgetAddOption {
             at = @At("TAIL"),
             remap = false
     )
-    private void makeInvisible(CallbackInfo ci) {
+    private void nopartialrecipes$makeInvisible(CallbackInfo ci) {
         if (REINoPartialRecipesClient.serverManager.getCurrentServerRecipeDataIDs().contains("minecraft") || MinecraftClient.getInstance().getCurrentServerEntry() == null) {
             this.visible = false;
+        } else if(REINoPartialRecipesClient.serverManager.relogRequired) {
+            this.visible = true;
         }
     }
 
@@ -72,8 +78,8 @@ public abstract class ImportantWarningsWidgetAddOption {
             ),
             remap = false
     )
-    private int addButtonSpace(int a, int b) {
-        return Math.min(a + 20, b);
+    private int nopartialrecipes$addButtonSpace(int a, int b) {
+        return REINoPartialRecipesClient.serverManager.relogRequired ? Math.min(a, b) : Math.min(a + 20, b);
     }
 
     @Unique
@@ -83,23 +89,25 @@ public abstract class ImportantWarningsWidgetAddOption {
             method = "render",
             at = @At("TAIL")
     )
-    private void onRender(DrawContext graphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        MutableText vanillaRecipesText = Text.translatable("text.rei-no-partial-recepies.recipes.not.full.option.button.enable");
-        graphics.getMatrices().pushMatrix();
-        graphics.getMatrices().translate(bounds.x + bounds.width / 2 - MinecraftClient.getInstance().textRenderer.getWidth(vanillaRecipesText) * 0.75f / 2, bounds.getMaxY() - 29);
-        graphics.getMatrices().scale(0.75f, 0.75f);
-        vanillaRecipesButtonBounds.setBounds(bounds.x, bounds.getMaxY() - 40, bounds.width, 19);
-        graphics.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, vanillaRecipesText, 0, 0,
-                vanillaRecipesButtonBounds.contains(mouseX, mouseY) ? 0xfffff8de : 0xAAFFFFFF);
-        graphics.getMatrices().popMatrix();
+    private void nopartialrecipes$renderButton(DrawContext graphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        if(!REINoPartialRecipesClient.serverManager.relogRequired) {
+            MutableText vanillaRecipesText = Text.translatable("text.rei-no-partial-recepies.recipes.not.full.option.button.enable");
+            graphics.getMatrices().pushMatrix();
+            graphics.getMatrices().translate(bounds.x + bounds.width / 2 - MinecraftClient.getInstance().textRenderer.getWidth(vanillaRecipesText) * 0.75f / 2, bounds.getMaxY() - 29);
+            graphics.getMatrices().scale(0.75f, 0.75f);
+            vanillaRecipesButtonBounds.setBounds(bounds.x, bounds.getMaxY() - 40, bounds.width, 19);
+            graphics.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, vanillaRecipesText, 0, 0,
+                    vanillaRecipesButtonBounds.contains(mouseX, mouseY) ? 0xfffff8de : 0xAAFFFFFF);
+            graphics.getMatrices().popMatrix();
+        }
     }
 
     @Inject(
             method = "mouseClicked",
             at = @At("RETURN"),
             cancellable = true)
-    private void checkButtonClicked(Click event, boolean doubleClick, CallbackInfoReturnable<Boolean> cir) {
-        if (!cir.getReturnValue() && this.visible && event.button() == 0 && vanillaRecipesButtonBounds.contains(event.x(), event.y())) {
+    private void nopartialrecipes$checkButtonClicked(Click event, boolean doubleClick, CallbackInfoReturnable<Boolean> cir) {
+        if (!cir.getReturnValue() && this.visible && event.button() == 0 && vanillaRecipesButtonBounds.contains(event.x(), event.y()) && !REINoPartialRecipesClient.serverManager.relogRequired) {
             dirty = false;
             this.visible = false;
             Widgets.produceClickSound();

@@ -24,6 +24,7 @@ public class ServerManager {
 
     private final Path filePath;
     public ServerSettings data;
+    public boolean relogRequired = false;
 
     public static class ServerSettings {
         ArrayList<ServerSetting> servers = new ArrayList<>();
@@ -56,7 +57,10 @@ public class ServerManager {
         this.filePath = configDir.resolve(MOD_ID + ".json");
         load();
         cleanup();
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> cleanup());
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+            cleanup();
+            relogRequired = false;
+        });
     }
 
     public void addCurrentServer() {
@@ -74,6 +78,7 @@ public class ServerManager {
         } else if (!enable && getServerRecipeDataIDs(serverAddress).contains("minecraft")) {
             data.servers.removeIf(s -> s.serverAddress.equals(serverAddress));
             saveAsync();
+            relogRequired = true;
         }
     }
 
