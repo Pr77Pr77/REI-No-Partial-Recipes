@@ -57,7 +57,7 @@ public abstract class ImportantWarningsWidgetAddOption {
             at = @At("TAIL")
     )
     private void makeInvisible(CallbackInfo ci) {
-        if(REINoPartialRecipesClient.serverManager.getCurrentServerRecipeDataIDs().contains("minecraft") || MinecraftClient.getInstance().getCurrentServerEntry() == null){
+        if (REINoPartialRecipesClient.serverManager.getCurrentServerRecipeDataIDs().contains("minecraft") || MinecraftClient.getInstance().getCurrentServerEntry() == null) {
             this.visible = false;
         }
     }
@@ -102,7 +102,7 @@ public abstract class ImportantWarningsWidgetAddOption {
             Widgets.produceClickSound();
             LOGGER.info("Clicked on enable vanilla recipes!");
             REINoPartialRecipesClient.serverManager.addCurrentServer();
-            new REIPlugin().registerDisplays(DisplayRegistry.getInstance());
+            REIPlugin.instance.registerDisplays(DisplayRegistry.getInstance());
             cir.setReturnValue(true);
         }
     }

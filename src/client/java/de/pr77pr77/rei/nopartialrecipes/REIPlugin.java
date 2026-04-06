@@ -9,11 +9,19 @@ import com.mojang.serialization.MapCodec;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.client.registry.display.reason.DisplayAdditionReason;
+import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.Display;
 import me.shedaniel.rei.api.common.registry.display.ServerDisplayRegistry;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
+import me.shedaniel.rei.impl.client.registry.display.DisplayRegistryImpl;
+import me.shedaniel.rei.impl.common.registry.displays.AbstractDisplayRegistry;
+import me.shedaniel.rei.plugin.client.displays.ClientsidedCookingDisplay;
+import me.shedaniel.rei.plugin.common.displays.cooking.DefaultBlastingDisplay;
+import me.shedaniel.rei.plugin.common.displays.cooking.DefaultSmeltingDisplay;
+import me.shedaniel.rei.plugin.common.displays.cooking.DefaultSmokingDisplay;
 import me.shedaniel.rei.plugin.common.displays.crafting.*;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.component.DataComponentTypes;
@@ -52,10 +60,24 @@ public class REIPlugin implements REIClientPlugin {
             "Herobrine", "God", "Santa Claus", "The Easter Bunny", "The Tooth Fairy"
     };
 
+    public static REIPlugin instance;
+
+    public boolean serverRecipesRegistered = false;
+    public boolean vanillaRecipesRegistered = false;
+
+    public REIPlugin() {
+        instance = this;
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+            serverRecipesRegistered = false;
+            vanillaRecipesRegistered = false;
+        });
+    }
+
+
     @SuppressWarnings("UnstableApiUsage")
     @Override
     public void registerDisplays(DisplayRegistry registry) {
-        if (!serverManager.getCurrentServerRecipeDataIDs().contains("minecraft")) {
+        if (!serverManager.getCurrentServerRecipeDataIDs().contains("minecraft") || vanillaRecipesRegistered) {
             return;
         }
         ServerDisplayRegistry serverRegistry = ServerDisplayRegistry.getInstance();
@@ -119,6 +141,50 @@ public class REIPlugin implements REIClientPlugin {
                 }
             }
         });
+        if (serverRecipesRegistered) {
+            List<Display> cookingDisplays = new ArrayList<>(registry.getAll().get(CategoryIdentifier.of("minecraft:plugins/smelting")));
+            cookingDisplays.addAll(registry.getAll().get(CategoryIdentifier.of("minecraft:plugins/smoking")));
+            cookingDisplays.addAll(registry.getAll().get(CategoryIdentifier.of("minecraft:plugins/blasting")));
+
+            cookingDisplays.forEach((display) -> {
+                if (removeServerRecipe((DisplayRegistryImpl) registry, display)) {
+                    ((AbstractDisplayRegistry<?, ?>) registry).holder().remove(display);
+                }
+            });
+        }
+        vanillaRecipesRegistered = true;
+    }
+
+    public static boolean removeServerRecipe(DisplayRegistryImpl registry, Display display) {
+        if (!(display instanceof ClientsidedCookingDisplay cookingDisplay)) {
+            return false;
+        }
+
+        CategoryIdentifier<?> categoryIdentifier;
+        Class<? extends Display> displayClass;
+
+        switch (cookingDisplay) {
+            case ClientsidedCookingDisplay.Smelting ignored -> {
+                categoryIdentifier = CategoryIdentifier.of("minecraft:plugins/smelting");
+                displayClass = DefaultSmeltingDisplay.class;
+            }
+            case ClientsidedCookingDisplay.Blasting ignored -> {
+                categoryIdentifier = CategoryIdentifier.of("minecraft:plugins/blasting");
+                displayClass = DefaultBlastingDisplay.class;
+            }
+            case ClientsidedCookingDisplay.Smoking ignored -> {
+                categoryIdentifier = CategoryIdentifier.of("minecraft:plugins/smoking");
+                displayClass = DefaultSmokingDisplay.class;
+            }
+            default -> {
+                return false;
+            }
+        }
+
+        return registry.getAll().get(categoryIdentifier).stream().anyMatch(existingDisplay ->
+                displayClass.isInstance(existingDisplay) &&
+                        existingDisplay.getInputEntries().equals(cookingDisplay.getInputEntries()) &&
+                        existingDisplay.getOutputEntries().equals(cookingDisplay.getOutputEntries()));
     }
 
     public static Recipe<?> parseRecipeFromJson(Identifier id, JsonElement json) {
