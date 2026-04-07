@@ -14,7 +14,7 @@ import java.util.List;
 
 import static de.pr77pr77.rei.nopartialrecipes.REINoPartialRecipesClient.serverManager;
 
-@Mixin(DisplayRegistryImpl.class)
+@Mixin(value = DisplayRegistryImpl.class, remap = false)
 public abstract class DisplayRegistryImplMixin {
 
     @Redirect(
