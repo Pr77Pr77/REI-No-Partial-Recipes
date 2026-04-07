@@ -66,12 +66,14 @@ public class REIPlugin implements REIClientPlugin {
 
     public REIPlugin() {
         instance = this;
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-            serverRecipesRegistered = false;
-            vanillaRecipesRegistered = false;
-        });
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> reconnectHandler());
+        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> reconnectHandler());
     }
 
+    private void reconnectHandler(){
+        serverRecipesRegistered = false;
+        vanillaRecipesRegistered = false;
+    }
 
     @SuppressWarnings("UnstableApiUsage")
     @Override
@@ -130,10 +132,10 @@ public class REIPlugin implements REIClientPlugin {
                         registry.add(new DefaultCustomShapelessDisplay(allBooksEntryIngredient,
                                 List.of(EntryIngredients.ofItemStacks(craftedBooks)), Optional.empty()));
                     } else {
-                        LOGGER.warn("BookCloningRecipe.craft(...) did not produce a result for a book with book count: " + countEmptyBooks);
+                        LOGGER.warn("BookCloningRecipe.craft(...) did not produce a result for a book with book count: {}", countEmptyBooks);
                     }
                 }
-            } else { // Using the ServerDisplayRegistry to fill the displays from RecipeEntry.
+            } else if (recipe != null) { // Using the ServerDisplayRegistry to fill the displays from RecipeEntry.
                 RecipeEntry<Recipe<?>> recipeEntry = new RecipeEntry<>(RegistryKey.of(RegistryKeys.RECIPE, data.id), recipe);
                 for (Display display : serverRegistry.tryFillDisplay(recipeEntry, DisplayAdditionReason.RECIPE_MANAGER)) {
                     registry.add(display, recipeEntry);
@@ -193,7 +195,8 @@ public class REIPlugin implements REIClientPlugin {
 
         JsonObject obj = json.getAsJsonObject();
         if (!obj.has("type")) {
-            throw new IllegalArgumentException("recipe json has no 'type' field (required). Recipe ID: " + id);
+            LOGGER.error("Recipe json has no 'type' field (required). Recipe ID: {}", id);
+            return null;
         }
 
         try {
@@ -204,7 +207,8 @@ public class REIPlugin implements REIClientPlugin {
             Identifier serializerId = Identifier.of(typeStr);
             RecipeSerializer<?> serializer = Registries.RECIPE_SERIALIZER.get(serializerId);
             if (serializer == null) {
-                throw new IllegalStateException("Unknown RecipeSerializer: " + serializerId + " (parsing recipe " + id + ")");
+                LOGGER.error("Unknown RecipeSerializer: {} (parsing recipe {})", serializerId, id);
+                return null;
             }
 
             // MapCodec -> Codec -> parse with RegistryOps
@@ -212,13 +216,33 @@ public class REIPlugin implements REIClientPlugin {
             Codec<? extends Recipe<?>> codec = mapCodec.codec();
             DataResult<? extends Recipe<?>> result = codec.parse(ops, json);
 
-            return result.result().orElseThrow(() -> {
-                String err = result.error().map(DataResult.Error::message).orElse("unknown codec error");
-                return new RuntimeException("Failed to parse recipe " + id + ": " + err);
-            });
+            Optional<? extends Recipe<?>> optional = result.result();
+
+            if (optional.isEmpty()) {
+                String err = result.error()
+                        .map(DataResult.Error::message)
+                        .orElse("unknown codec error");
+
+                if (err.contains("Not a JSON object")) {
+                    LOGGER.warn("The server didn't send the required tag for the recipe '{}'. This recipe will not be available! Error message: {}", id, err);
+                    return null;
+                } else if (err.contains("ResourceKey[")) {
+                    LOGGER.warn("The server didn't send the required registry entry for the recipe '{}'. This recipe will not be available! Error message: {}", id, err);
+                    return null;
+                } else if (err.contains("List is too short")) {
+                    LOGGER.warn("The server did send an empty tag, which is required for the recipe '{}'. This recipe will not be available! Error message: {}", id, err);
+                    return null;
+                }
+                LOGGER.error("Error while parsing recipe '{}': {}", id, err);
+                return null;
+            }
+
+            return optional.get();
 
         } catch (Exception e) {
-            throw new RuntimeException("Error while parsing recipe " + id, e);
+            String msg = e.getMessage();
+            LOGGER.error("Error while or before parsing recipe '{}': {}", id, msg);
+            return null;
         }
     }
 
