@@ -46,6 +46,6 @@ jobs:
             rei(required)
             modmenu(optional)
           game-versions: |
-            1.21.11
+            1.21.8
           java: |
             >=21
