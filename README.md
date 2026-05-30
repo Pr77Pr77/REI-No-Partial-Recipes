@@ -9,7 +9,7 @@ if you can't install REI on the server, because it is fully vanilla or a public 
 This mod is only supported by the Fabric mod loader. For installation guides regarding Fabric
 please use the official [Fabric player guides](https://docs.fabricmc.net/players/).
 
-You can download the mod on either [Modrinth](https://modrinth.com/mod/rei-no-partial-recipes) or on [GitHub](https://github.com/Pr77Pr77/savedcommands)
+You can download the mod on either [Modrinth](https://modrinth.com/mod/rei-no-partial-recipes) or on [GitHub](https://github.com/Pr77Pr77/REI-No-Partial-Recipes)
 under [releases](https://github.com/Pr77Pr77/REI-No-Partial-Recipes).
 This mod needs the following dependencies:
 
