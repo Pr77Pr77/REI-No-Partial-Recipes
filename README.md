@@ -1,5 +1,13 @@
 # REI No Partial Recipes
 
+# Important notice
+
+As the functionality got added in 26.1+ ([Commit 2cf8690](https://github.com/shedaniel/RoughlyEnoughItems/commit/2cf86900ad5718081e32847054507f7b8ad92a36))
+of REI itself, this mod will **no longer receive any ports to new versions**.
+If you need a backport to an older version, please create [issue on GitHub](https://github.com/Pr77Pr77/REI-No-Partial-Recipes/issues) or create a ticket on my [discord server](https://discord.gg/wfeM63Jar5).
+
+---
+
 This Mod allows REI to display all vanilla recipes on servers that do not use REI.
 Please note this mod does not replace REI on the server. It is ony meant as workaround,
 if you can't install REI on the server, because it is fully vanilla or a public server.
